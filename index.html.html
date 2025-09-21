@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Izraa - Agricultural Operating System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #2d5e3e, #4a9d5f);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+            cursor: pointer;
+        }
+
+        nav a:hover {
+            opacity: 0.8;
+        }
+
+        .hero {
+            background: linear-gradient(rgba(45, 94, 62, 0.8), rgba(45, 94, 62, 0.8)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400"><rect fill="%2368B684" width="1200" height="400"/><path fill="%234a9d5f" d="M0,160 C300,180 600,140 1200,160 L1200,400 L0,400 Z"/></svg>');
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-button {
+            background: #e74c3c;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+
+        .cta-button:hover {
+            background: #c0392b;
+        }
+
+        .features {
+            padding: 4rem 0;
+            background: white;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 1rem;
+            background: #4a9d5f;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #2d5e3e;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: black;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .btn {
+            background: #4a9d5f;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background: #3a7d4f;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+
+        .calculator-result {
+            background: #e8f5e8;
+            border: 1px solid #4a9d5f;
+            border-radius: 5px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .marketplace-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .product-image {
+            height: 150px;
+            background: linear-gradient(45deg, #68B684, #4a9d5f);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .product-info {
+            padding: 1rem;
+        }
+
+        .product-price {
+            color: #e74c3c;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .expert-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .expert-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #68B684, #4a9d5f);
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+        }
+
+        .rating {
+            color: #ffc107;
+            margin: 0.5rem 0;
+        }
+
+        .crowdfunding-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #eee;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #4a9d5f;
+            transition: width 0.3s;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            padding: 2rem 0;
+            background: #f8f9fa;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #4a9d5f;
+        }
+
+        footer {
+            background: #2d5e3e;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f1f1f1;
+            border-radius: 10px 10px 0 0;
+            overflow: hidden;
+            margin-bottom: 0;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 1rem;
+            background: #f1f1f1;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .tab.active {
+            background: white;
+            color: #4a9d5f;
+        }
+
+        .tab-content {
+            display: none;
+            background: white;
+            padding: 2rem;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .marketplace-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">🌱 Izraa</div>
+                <nav>
+                    <ul>
+                        <li><a onclick="showSection('home')">Home</a></li>
+                        <li><a onclick="openModal('calculatorModal')">Calculator</a></li>
+                        <li><a onclick="showSection('marketplace')">Marketplace</a></li>
+                        <li><a onclick="showSection('experts')">Experts</a></li>
+                        <li><a onclick="showSection('crowdfunding')">Crowdfunding</a></li>
+                        <li><a onclick="openModal('loginModal')">Login</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section id="home" class="section">
+        <div class="hero">
+            <div class="container">
+                <h1>Agricultural Operating System for MENA</h1>
+                <p>Empower your farm with precision planning, expert guidance, marketplace access, and direct consumer connections - all in one integrated platform.</p>
+                <a href="#" class="cta-button" onclick="openModal('signupModal')">Get Started Today</a>
+            </div>
+        </div>
+
+        <div class="features">
+            <div class="container">
+                <h2 class="section-title">Everything You Need to Succeed</h2>
+                <div class="features-grid">
+                    <div class="feature-card" onclick="openModal('calculatorModal')">
+                        <div class="feature-icon">📊</div>
+                        <h3>Feasibility Calculator</h3>
+                        <p>Make data-driven decisions with crop-specific financial modeling and ROI projections.</p>
+                    </div>
+                    <div class="feature-card" onclick="showSection('marketplace')">
+                        <div class="feature-icon">🛒</div>
+                        <h3>B2B Marketplace</h3>
+                        <p>Access quality seeds, fertilizers, and equipment at competitive prices from verified suppliers.</p>
+                    </div>
+                    <div class="feature-card" onclick="showSection('experts')">
+                        <div class="feature-icon">👨‍🌾</div>
+                        <h3>Expert Advisory</h3>
+                        <p>Connect with agricultural specialists for personalized guidance and consultation services.</p>
+                    </div>
+                    <div class="feature-card" onclick="showSection('crowdfunding')">
+                        <div class="feature-icon">💰</div>
+                        <h3>Crowdfunding</h3>
+                        <p>Secure financing for your projects through our integrated crowdfunding platform.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🏪</div>
+                        <h3>B2C Produce Shop</h3>
+                        <p>Sell directly to consumers, eliminating middlemen and increasing your profit margins.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📱</div>
+                        <h3>Mobile Access</h3>
+                        <p>Manage your farm operations on-the-go with our mobile-optimized platform.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="container">
+                <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 2rem;">
+                    <div>
+                        <div class="stat-number">1,000+</div>
+                        <div>Active Farmers</div>
+                    </div>
+                    <div>
+                        <div class="stat-number">25%</div>
+                        <div>Avg. Profit Increase</div>
+                    </div>
+                    <div>
+                        <div class="stat-number">$500K</div>
+                        <div>Monthly GMV</div>
+                    </div>
+                    <div>
+                        <div class="stat-number">3</div>
+                        <div>Countries Served</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="marketplace" class="section" style="display: none; padding: 4rem 0; background: white;">
+        <div class="container">
+            <h2 class="section-title">B2B Marketplace</h2>
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('seeds')">Seeds</button>
+                <button class="tab" onclick="showTab('fertilizers')">Fertilizers</button>
+                <button class="tab" onclick="showTab('equipment')">Equipment</button>
+            </div>
+            
+            <div id="seeds" class="tab-content active">
+                <div class="marketplace-grid">
+                    <div class="product-card">
+                        <div class="product-image">🌱</div>
+                        <div class="product-info">
+                            <h4>Premium Tomato Seeds</h4>
+                            <p>High-yield hybrid variety suitable for Jordan Valley climate</p>
+                            <div class="product-price">$45/kg</div>
+                            <button class="btn" style="width: 100%; margin-top: 1rem;">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-image">🌿</div>
+                        <div class="product-info">
+                            <h4>Organic Basil Seeds</h4>
+                            <p>Certified organic herb seeds for high-value crops</p>
+                            <div class="product-price">$32/kg</div>
+                            <button class="btn" style="width: 100%; margin-top: 1rem;">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-image">🥒</div>
+                        <div class="product-info">
+                            <h4>Cucumber Seeds</h4>
+                            <p>Disease-resistant variety with extended harvest period</p>
+                            <div class="product-price">$28/kg</div>
+                            <button class="btn" style="width: 100%; margin-top: 1rem;">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="fertilizers" class="tab-content">
+                <div class="marketplace-grid">
+                    <div class="product-card">
+                        <div class="product-image">🧪</div>
+                        <div class="product-info">
+                            <h4>NPK Fertilizer 20-20-20</h4>
+                            <p>Balanced nutrition for vegetable crops</p>
+                            <div class="product-price">$85/50kg</div>
+                            <button class="btn" style="width: 100%; margin-top: 1rem;">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-image">🌱</div>
+                        <div class="product-info">
+                            <h4>Organic Compost</h4>
+                            <p>Premium organic matter for soil enrichment</p>
+                            <div class="product-price">$25/50kg</div>
+                            <button class="btn" style="width: 100%; margin-top: 1rem;">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="equipment" class="tab-content">
+                <div class="marketplace-grid">
+                    <div class="product-card">
+                        <div class="product-image">💧</div>
+                        <div class="product-info">
+                            <h4>Drip Irrigation Kit</h4>
+                            <p>Complete system for 1 hectare coverage</p>
+                            <div class="product-price">$1,200/kit</div>
+                            <button class="btn" style="width: 100%; margin-top: 1rem;">Request Quote</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="experts" class="section" style="display: none; padding: 4rem 0; background: #f8f9fa;">
+        <div class="container">
+            <h2 class="section-title">Agricultural Experts</h2>
+            <div class="marketplace-grid">
+                <div class="expert-card">
+                    <div class="expert-avatar">👩‍🌾</div>
+                    <h4>Dr. Sarah Al-Rashid</h4>
+                    <p>Sustainable Agriculture Specialist</p>
+                    <div class="rating">★★★★★ (4.9/5)</div>
+                    <p style="font-size: 0.9rem; margin: 1rem 0;">15+ years experience in MENA region sustainable farming practices</p>
+                    <div style="margin: 1rem 0;">
+                        <strong>$75/hour</strong>
+                    </div>
+                    <button class="btn" onclick="openModal('bookingModal')">Book Consultation</button>
+                </div>
+                <div class="expert-card">
+                    <div class="expert-avatar">👨‍🌾</div>
+                    <h4>Ahmad Mansour</h4>
+                    <p>Irrigation Systems Expert</p>
+                    <div class="rating">★★★★★ (4.8/5)</div>
+                    <p style="font-size: 0.9rem; margin: 1rem 0;">Specialist in water-efficient farming systems for arid regions</p>
+                    <div style="margin: 1rem 0;">
+                        <strong>$65/hour</strong>
+                    </div>
+                    <button class="btn" onclick="openModal('bookingModal')">Book Consultation</button>
+                </div>
+                <div class="expert-card">
+                    <div class="expert-avatar">👨‍💼</div>
+                    <h4>Omar Khalil</h4>
+                    <p>Agricultural Finance Advisor</p>
+                    <div class="rating">★★★★☆ (4.7/5)</div>
+                    <p style="font-size: 0.9rem; margin: 1rem 0;">Expertise in farm business planning and financial optimization</p>
+                    <div style="margin: 1rem 0;">
+                        <strong>$80/hour</strong>
+                    </div>
+                    <button class="btn" onclick="openModal('bookingModal')">Book Consultation</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="crowdfunding" class="section" style="display: none; padding: 4rem 0; background: white;">
+        <div class="container">
+            <h2 class="section-title">Crowdfunding Projects</h2>
+            <button class="btn" style="float: right; margin-bottom: 2rem;" onclick="openModal('projectModal')">Create Project</button>
+            <div style="clear: both;"></div>
+            <div class="marketplace-grid">
+                <div class="crowdfunding-card">
+                    <div class="product-image">🍅</div>
+                    <div class="product-info">
+                        <h4>Smart Greenhouse for Tomatoes</h4>
+                        <p>Ahmed's project to build climate-controlled greenhouse in Jordan Valley</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 75%;"></div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin: 1rem 0;">
+                            <div><strong>$15,000</strong><br>Raised</div>
+                            <div><strong>$20,000</strong><br>Goal</div>
+                            <div><strong>12</strong><br>Days Left</div>
+                        </div>
+                        <button class="btn" style="width: 100%;">Invest Now</button>
+                    </div>
+                </div>
+                <div class="crowdfunding-card">
+                    <div class="product-image">🌿</div>
+                    <div class="product-info">
+                        <h4>Organic Herb Farm Expansion</h4>
+                        <p>Expanding organic basil and mint production with new irrigation</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 45%;"></div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin: 1rem 0;">
+                            <div><strong>$4,500</strong><br>Raised</div>
+                            <div><strong>$10,000</strong><br>Goal</div>
+                            <div><strong>25</strong><br>Days Left</div>
+                        </div>
+                        <button class="btn" style="width: 100%;">Invest Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modals -->
+    <div id="calculatorModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('calculatorModal')">&times;</span>
+            <h2>Feasibility Calculator</h2>
+            <form id="calculatorForm">
+                <div class="form-group">
+                    <label>Crop Type:</label>
+                    <select id="cropType" required>
+                        <option value="">Select Crop</option>
+                        <option value="tomato">Tomato</option>
+                        <option value="basil">Basil</option>
+                        <option value="cucumber">Cucumber</option>
+                        <option value="mint">Mint</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Land Size (hectares):</label>
+                    <input type="number" id="landSize" min="0.1" step="0.1" required>
+                </div>
+                <div class="form-group">
+                    <label>Investment Budget ($):</label>
+                    <input type="number" id="budget" min="100" required>
+                </div>
+                <div class="form-group">
+                    <label>Season:</label>
+                    <select id="season" required>
+                        <option value="">Select Season</option>
+                        <option value="winter">Winter</option>
+                        <option value="spring">Spring</option>
+                        <option value="summer">Summer</option>
+                        <option value="fall">Fall</option>
+                    </select>
+                </div>
+                <button type="button" class="btn" onclick="calculateFeasibility()">Calculate ROI</button>
+            </form>
+            <div id="calculatorResults" style="display: none;"></div>
+        </div>
+    </div>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <h2>Login to Izraa</h2>
+            <form>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" required>
+                </div>
+                <div class="form-group">
+                    <label>Password:</label>
+                    <input type="password" required>
+                </div>
+                <button type="button" class="btn" onclick="alert('Login functionality would be implemented with backend')">Login</button>
+                <button type="button" class="btn btn-secondary" style="margin-left: 1rem;" onclick="openModal('signupModal'); closeModal('loginModal')">Sign Up Instead</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('signupModal')">&times;</span>
+            <h2>Join Izraa</h2>
+            <form>
+                <div class="form-group">
+                    <label>Full Name:</label>
+                    <input type="text" required>
+                </div>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone:</label>
+                    <input type="tel" required>
+                </div>
+                <div class="form-group">
+                    <label>User Type:</label>
+                    <select required>
+                        <option value="">Select Type</option>
+                        <option value="farmer">Farmer</option>
+                        <option value="consultant">Agricultural Consultant</option>
+                        <option value="supplier">Input Supplier</option>
+                        <option value="investor">Investor</option>
+                        <option value="consumer">Consumer</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Password:</label>
+                    <input type="password" required>
+                </div>
+                <button type="button" class="btn" onclick="alert('Registration functionality would be implemented with backend')">Create Account</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="bookingModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('bookingModal')">&times;</span>
+            <h2>Book Consultation</h2>
+            <form>
+                <div class="form-group">
+                    <label>Preferred Date:</label>
+                    <input type="date" required>
+                </div>
+                <div class="form-group">
+                    <label>Preferred Time:</label>
+                    <select required>
+                        <option value="">Select Time</option>
+                        <option value="09:00">9:00 AM</option>
+                        <option value="10:00">10:00 AM</option>
+                        <option value="11:00">11:00 AM</option>
+                        <option value="14:00">2:00 PM</option>
+                        <option value="15:00">3:00 PM</option>
+                        <option value="16:00">4:00 PM</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Consultation Type:</label>
+                    <select required>
+                        <option value="">Select Type</option>
+                        <option value="video">Video Call</option>
+                        <option value="phone">Phone Call</option>
+                        <option value="on-site">On-Site Visit (+$50)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Describe your needs:</label>
+                    <textarea rows="4" placeholder="Tell us about your farming challenges or goals..."></textarea>
+                </div>
+                <button type="button" class="btn" onclick="alert('Booking functionality would be implemented with backend and payment processing')">Book & Pay</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="projectModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('projectModal')">&times;</span>
+            <h2>Create Crowdfunding Project</h2>
+            <form>
+                <div class="form-group">
+                    <label>Project Title:</label>
+                    <input type="text" placeholder="e.g., Smart Greenhouse for Organic Vegetables" required>
+                </div>
+                <div class="form-group">
+                    <label>Funding Goal ($):</label>
+                    <input type="number" min="1000" required>
+                </div>
+                <div class="form-group">
+                    <label>Project Duration (days):</label>
+                    <input type="number" min="1" max="90" value="30" required>
+                </div>
+                <div class="form-group">
+                    <label>Project Description:</label>
+                    <textarea rows="4" placeholder="Describe your project, expected returns, and impact..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Expected ROI for Investors (%):</label>
+                    <input type="number" min="5" max="30" step="0.5" required>
+                </div>
+                <button type="button" class="btn" onclick="alert('Project creation would be implemented with backend processing and verification')">Submit Project</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Izraa Agricultural Operating System. Empowering MENA farmers for sustainable growth.</p>
+            <p>Contact: info@izraa.com | +962-6-1234567</p>
+        </div>
+    </footer>
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).style.display = 'block';
+        }
+
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function showTab(tabId) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabId).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        function calculateFeasibility() {
+            const cropType = document.getElementById('cropType').value;
+            const landSize = parseFloat(document.getElementById('landSize').value);
+            const budget = parseFloat(document.getElementById('budget').value);
+            const season = document.getElementById('season').value;
+
+            if (!cropType || !landSize || !budget || !season) {
+                alert('Please fill all fields');
+                return;
+            }
+
+            // Mock calculation logic
+            const cropData = {
+                tomato: { yield: 50, pricePerKg: 2.5, costPerHectare: 3000 },
+                basil: { yield: 8, pricePerKg: 12, costPerHectare: 2500 },
+                cucumber: { yield: 35, pricePerKg: 1.8, costPerHectare: 2800 },
+                mint: { yield: 6, pricePerKg: 15, costPerHectare: 2200 }
+            };
+
+            const crop = cropData[cropType];
+            const totalYield = crop.yield * landSize;
+            const grossRevenue = totalYield * crop.pricePerKg * 1000; // Convert to tons
+            const totalCosts = (crop.costPerHectare * landSize) + budget;
+            const netProfit = grossRevenue - totalCosts;
+            const roi = ((netProfit / totalCosts) * 100).toFixed(1);
+
+            const seasonMultiplier = season === 'winter' ? 1.2 : season === 'summer' ? 0.9 : 1.0;
+            const adjustedProfit = netProfit * seasonMultiplier;
+            const adjustedROI = ((adjustedProfit / totalCosts) * 100).toFixed(1);
+
+            const resultsHTML = `
+                <div class="calculator-result">
+                    <h3>Financial Projection Results</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0;">
+                        <div><strong>Expected Yield:</strong> ${totalYield.toFixed(1)} tons</div>
+                        <div><strong>Gross Revenue:</strong> $${grossRevenue.toLocaleString()}</div>
+                        <div><strong>Total Costs:</strong> $${totalCosts.toLocaleString()}</div>
+                        <div><strong>Net Profit:</strong> $${adjustedProfit.toLocaleString()}</div>
+                    </div>
+                    <div style="background: #4a9d5f; color: white; padding: 1rem; border-radius: 5px; text-align: center; margin-top: 1rem;">
+                        <h4>Projected ROI: ${adjustedROI}%</h4>
+                        <p>Season adjustment applied for ${season}</p>
+                    </div>
+                    <div style="margin-top: 1rem; padding: 1rem; background: #e8f5e8; border-radius: 5px;">
+                        <h4>Recommendations:</h4>
+                        <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+                            <li>Consider consulting with our ${cropType} specialists</li>
+                            <li>Browse our marketplace for quality ${cropType} seeds</li>
+                            <li>Explore crowdfunding options if additional capital needed</li>
+                        </ul>
+                        <button class="btn" style="margin-top: 1rem;" onclick="showSection('experts'); closeModal('calculatorModal');">Find Expert Advice</button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('calculatorResults').innerHTML = resultsHTML;
+            document.getElementById('calculatorResults').style.display = 'block';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+
+        // Initialize the page showing home section
+        document.addEventListener('DOMContentLoaded', function() {
+            showSection('home');
+        });
+    </script>
+</body>
+</html>
